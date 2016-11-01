@@ -1,0 +1,15 @@
+This Text Editor does following things
+1.User may opens file with commond line argument orelse you may also open any file inside while text editor is running.
+2.The opened file can be edited.
+3.And user may save the edited file or else can exit text editor withoout saving.
+4.It has following functionalities..
+
+CTRL_O - open a file
+CTRL_W - save a file
+CTRL_X - cut a string
+CTRL_B - copy a string
+CTRL_V - paste the cut/copied string
+CTRL_R - replace the string with some another string
+CTRL_E - exit from the text editor
+CTRL_D - delete line
+

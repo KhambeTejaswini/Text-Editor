@@ -1,3 +1,19 @@
+/*****************************************************************************
+ * Copyright (C) Khambe Tejaswini Rajaram khambetr15.comp@coep.ac.in
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
 #include <ncurses.h> 
 #include<stdio.h>
 #include<string.h>
@@ -8,78 +24,54 @@
 int main(int argc, char *argv[]) {
 	int parent_x, parent_y,new_y,new_x;
         int name_size = 1;
-        int menu_size = 2;
-	int ch;
+        int menu_size = 3;
+	char c;
 	char *str;
-	str = (char*)malloc(16);
-	strcpy(str,argv[1]);
-        initscr();
+	if(argc == 0){	
+		str = NULL;
+	}
+	else
+		str = argv[1];
+	initscr();
         noecho();
-	//cbreak;
 	keypad(stdscr,TRUE);
         curs_set(TRUE);
-    // get our maximum window dimensions
+	//curses_init();
         getmaxyx(stdscr, parent_y, parent_x);
-    // set up initial windows
         WINDOW *filename  = newwin(name_size,parent_x, 0, 0);
 	noecho();
         WINDOW *field = newwin(parent_y - menu_size - name_size, parent_x, 1, 0);	
+	//scrollok(field,TRUE);
 	keypad(field,TRUE);
 	keypad(filename,TRUE);
 	noecho();
         WINDOW *menu = newwin(menu_size, parent_x, parent_y - menu_size, 0);
-	print_menu(menu , parent_y - menu_size, parent_y);
-	wgetch(menu);
+	start_color();
+	init_pair(1,COLOR_BLACK,COLOR_WHITE);
+	init_pair(2,COLOR_WHITE,COLOR_BLACK);
+	wbkgd(menu,COLOR_PAIR(2));
+	wrefresh(menu);
+	wbkgd(filename,COLOR_PAIR(2));
+	wrefresh(filename);
+	wbkgd(field,COLOR_PAIR(1));
+	wrefresh(field);
+	keypad(menu,TRUE);
 	noecho();
-        FILE* f1 = fopen(argv[1],"a");
 	list *l;
-	//wprintw(field, "hello");
-	/*if(argc < 1){
-		//wprintw(field, "hello");
-		l = (list*)malloc(sizeof(list));
-		init(l);
-		strcpy(str,"NO NAME");
-	}
-	else{
-		//wprintw(field, "hello");
-		str = argv[1];
-		l = open_file(str);
-	}*/
-	while(1){    
-        	getmaxyx(stdscr, new_y, new_x);
-        	if (new_y != parent_y || new_x != parent_x) {
-			parent_x = new_x;
-			parent_y = new_y;
-			wresize(filename,name_size,new_x);
-			wresize(field, new_y - menu_size - name_size, new_x);
-			wresize(menu, menu_size, new_x);	
-			mvwin(field,name_size,0);
-			mvwin(menu, new_y - menu_size, 0);
-				//print_menu(menu , new_x, new_y);
-			wclear(stdscr);
-			wclear(filename);
-			wclear(field);
-			wclear(menu);
-        	}
-		
-		mvwprintw(filename, 0, parent_x/2-9,"FILE NAME : %s" ,str);
-		wgetch(filename);
-		l = open_file(str);
-		//traverse(l,field);
-		edit_win(l,field);
-		save_file(l,str);
-		ch = wgetch(filename);
-		if(ch == CTRL_E)
-			exit(1);
-		wrefresh(filename);
-		wrefresh(field);
-		wrefresh(menu);
-       }
-  //  sleep(50000); // clean up
-    delwin(filename);
-    delwin(field);
-    delwin(menu);
-    endwin();
-    return 0;
+	l = open_file(str);
+	getmaxyx(stdscr, new_y, new_x);
+	print_menu(menu, 0 , 0);
+	wrefresh(menu);
+	mvwprintw(filename, 0, new_x/2-9,"FILE NAME : %s" ,str);
+	wrefresh(filename);
+	edit_win(l,field,menu,filename,str);
+	wrefresh(filename);
+	wrefresh(field);
+	wrefresh(menu);
+	delwin(filename);
+	delwin(field);
+	delwin(menu);
+	endwin();
+	return 0;
     }
 

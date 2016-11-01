@@ -14,9 +14,12 @@ void init(list*);
 int insert(list* ,int ,int ,char);
 void remov(list*,int, int);
 void traverse(list* l,WINDOW*);
-void save_file(list* l,char* c);
+void save_file(list* l,char* c,WINDOW* ,WINDOW* );
 list* open_file(char* );
-char* copy(list*,int ,int ,int ,int );
-char* cut(list* ,int ,int);
+void delete_line(list* ,int);
+char* copy(list*,int ,int ,int ,int, WINDOW* );
+char* cut(list* ,int ,int, int, int, WINDOW*);
+void paste(list* ,char*,int ,int );
+int stringreplace(WINDOW* ,WINDOW* ,list*, char *orig, char *new);
 #endif
 

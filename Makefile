@@ -1,5 +1,5 @@
-abc : editormain.o editorfunctions.o editords.o 
-	cc editormain.o editorfunctions.o editords.o -o abc -lncurses
+project : editormain.o editorfunctions.o editords.o 
+	cc editormain.o editorfunctions.o editords.o -o project -lncurses
 editormain.o: editormain.c editords.h editorfunctions.h
 	cc -Wall -c editormain.c
 editorfunctions.o: editorfunctions.c editorfunctions.h editords.h
