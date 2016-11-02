@@ -1,4 +1,6 @@
 # Text-Editor
+NAME : KHAMBE TEJASWINI RAJARAM
+MIS  : 111503033
 text editor
 This Text Editor does following things
 1.User may opens file with commond line argument orelse you may also open any file inside while text editor is running (without   commond line argument).
