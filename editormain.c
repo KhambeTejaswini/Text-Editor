@@ -22,10 +22,9 @@
 #include "editorfunctions.h"
 #include "editords.h"
 int main(int argc, char *argv[]) {
-	int parent_x, parent_y,new_y,new_x;
+	int parent_x, parent_y,new_x;
         int name_size = 1;
         int menu_size = 3;
-	char c;
 	char *str;
 	if(argc == 0){	
 		str = NULL;
@@ -59,7 +58,7 @@ int main(int argc, char *argv[]) {
 	noecho();
 	list *l;
 	l = open_file(str);
-	getmaxyx(stdscr, new_y, new_x);
+	new_x = getmaxx(field);
 	print_menu(menu, 0 , 0);
 	wrefresh(menu);
 	mvwprintw(filename, 0, new_x/2-9,"FILE NAME : %s" ,str);
