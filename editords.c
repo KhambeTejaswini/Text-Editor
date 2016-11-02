@@ -1,10 +1,26 @@
+/*****************************************************************************
+ * Copyright (C) Khambe Tejaswini Rajaram khambetr15.comp@coep.ac.in
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include"editords.h"
 #include"editorfunctions.h"
 #include<ncurses.h>
-#define MAX 128
+#define MAX 256
 void init(list *l){
 	l->head = NULL;
 	l->length = 0;
@@ -92,7 +108,7 @@ void remov(list* l,int x,int y){
 	int i = 0 , j = 0,k = 0;
 	node *p,*tmp;
 	p = l->head;
-	if(x == 0&&y == 0){
+	if(p->line_size == 0){
 		l->head = l->head->next;
 		free(p->str);
 		free(p);
@@ -219,12 +235,16 @@ char* copy(list* l,int x1,int y1, int x2, int y2,WINDOW* w){
 	int i = 0, j = 0;
 	node *p;
 	char *tmp;
-	int len = (y2-y1)*getmaxx(w) + x2-x1;
+	int len = MAX;
 	tmp = (char*)malloc(sizeof(char)*(len+1));
 	p = l->head;
 	for(i = 0;i < y1;i++)
 		p = p->next;
 	do{
+		if(j == MAX){
+			len = len*2;
+			tmp = (char*)realloc(tmp, (len + 1));
+		}
 		tmp[j] = p->str[x1];
 		if(p->str[x1] == '\n'){
 			y1++;
@@ -244,12 +264,16 @@ char* cut(list* l,int x1,int y1,int x2,int y2, WINDOW* w){
 	int k = x1,m = y1;
 	node *p;
 	char *tmp;
-	int len = (y2-y1)*getmaxx(w) + x2-x1;
+	int len = MAX ;
 	tmp = (char*)malloc(sizeof(char)*(len+1));
 	p = l->head;
 	for(i = 0;i < y1;i++)
 		p = p->next;
 	do{
+		if(j == MAX){
+			len = len*2;
+			tmp = (char*)realloc(tmp, (len + 1));
+		}
 		tmp[j] = p->str[k];
 		if(p->str[k] == '\n'){
 			m++;
