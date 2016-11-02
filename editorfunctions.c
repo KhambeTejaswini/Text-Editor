@@ -352,7 +352,7 @@ void edit_win(list* l,WINDOW *w, WINDOW *menu, WINDOW *filename, char * file_nam
 					wclear(w);
 					wrefresh(w);
 					traverse(l,w);
-					wmove(w, y ,x);
+					wmove(w, x ,y);
 					break;
 				case CTRL_O:
 					mvwprintw(menu,0,0,"Enter new filename:");
