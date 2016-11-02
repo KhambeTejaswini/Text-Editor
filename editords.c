@@ -161,7 +161,7 @@ list* open_file(char* s){
 		return l1;
 	FILE* f1;
 	if((f1 = fopen(s,"r")) == NULL){
-		f1 = fopen(s,"a");
+		f1 = fopen(s,"w");
 		return l1;
 	}
 	char c;
@@ -327,7 +327,7 @@ int stringreplace(WINDOW* w,WINDOW* menu,list *l, char *orig, char *new){
 	int len = 0;
 	char c;
 	while(p != NULL){
-	lt = strlen(p->str);
+	lt = p->line_size;
 	lo = strlen(orig);
 	ln = strlen(new);
 	for(i = 0; i < (lt+no*(ln-lo)) ;i++ ) {
@@ -349,16 +349,20 @@ int stringreplace(WINDOW* w,WINDOW* menu,list *l, char *orig, char *new){
 				wprintw(menu,"%c",c);
 				wrefresh(menu);
 				if(c == 'y'){
-				if(ln>lo){
-					for(k=lt+no*(ln-lo);k>=i;k--)
-						p->str[k+ln-lo] = p->str[k]; 
-				}
-				if(ln<lo){
-					for(k=i;k<lt-no;k++)
-						p->str[k] = p->str[k+lo-ln];
-				}
-				for(k=0;k<ln;k++)
-					p->str[i+k]=new[k];
+					if(ln>lo){
+						for(k=lt+no*(ln-lo)+1;k>=i;k--){
+							p->str[k+ln-lo] = p->str[k];
+							p->line_size++;
+						} 
+					}
+					if(ln<lo){
+						for(k=i;k<lt-no;k++){
+							p->str[k] = p->str[k+lo-ln];
+							p->line_size--;
+						}
+					}
+					for(k=0;k<ln;k++)
+						p->str[i+k]=new[k];
 				}
 				wclear(w);
 				traverse(l,w);
